@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Jigsaw Puzzle Generator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Mariusz Bartosik">
+    <style>
+    body {background-color: #eee; margin:20px;text-align:center;}
+    canvas {background-color: #fff;}
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      context.lineJoin = 'round';
+      context.lineWidth = 2;
+      var size = 60;
+      var bump = 0.4;
+      var amountX = 12;
+      var amountY = 8;
+      context.translate((800 - size * amountX) / 2.0, (600 - size * amountY) / 2.0);  // center on canvas
+      for (i = 0; i < amountX; i++) {
+        for (j = 0; j < amountY; j++) {
+          context.beginPath();                // horizontal
+          context.moveTo(i * size, j * size);
+          context.lineTo(i * size, j * size + 0.3 * size);
+          flip = Math.random() > 0.5 ? 1.0 : -1.0;
+          flip = (i == 0 ? 0 : flip);         // no bump if left border
+          context.quadraticCurveTo(i * size + flip * bump * size, j * size + 0.5 * size, i * size, j * size + 0.7 * size);
+          context.lineTo(i * size, j * size + 1.0 * size);
+          context.stroke();
+
+          context.beginPath();                // vertical
+          context.moveTo(i * size, j * size);
+          context.lineTo(i * size + 0.3 * size, j * size);
+          flip = Math.random() > 0.5 ? 1.0 : -1.0;
+          flip = (j == 0 ? 0 : flip);         // no bump if top border
+          context.quadraticCurveTo(i * size + 0.5 * size, j * size + flip * bump * size, i * size + 0.7 * size, j * size);
+          context.lineTo(i * size + 1.0 * size, j * size);
+          context.stroke();
+        }
+      }
+      context.beginPath();                    // bottom and right border
+      context.moveTo(0, amountY * size);
+      context.lineTo(amountX * size, amountY * size);
+      context.lineTo(amountX * size, 0);
+      context.stroke();
+    </script>
+  </body>
+</html>
